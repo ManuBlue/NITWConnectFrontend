@@ -9,18 +9,14 @@ function People() {
   const [myData,setMyData] = useState(null);
   const[friendsList,setFriendsList] = useState(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    fetch('/mydata', { credentials: 'include' })
-      .then(response => {
-        if (response.status === 401) {
-            navigate('/');
-        }
-      })
-  }, [navigate]);
+  const token = localStorage.getItem('token')
+  if(!token) {
+    navigate('/login');
+  }
 
 
   useEffect(() => {
-    axios.get('/allusers', { withCredentials: true })
+    axios.get('/allusers', {params: {token: token},withCredentials: true})
       .then(response => {
         setUserData(response.data);
         setLoading1(false);
@@ -45,7 +41,7 @@ function People() {
   
   const sendFriendRequest = (email) => {
     let data = { to: email, from: myData.email };
-    axios.post("http://localhost:5000/addfriend", data)
+    axios.post("https://nitw-connect-backend.vercel.app/addfriend", data)
         .then(result => {
             console.log(result.data.message);
             if (result.status === 201) {
