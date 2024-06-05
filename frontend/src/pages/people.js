@@ -13,32 +13,54 @@ function People() {
   if(!token) {
     navigate('/login');
   }
-
-
   useEffect(() => {
-    axios.get('/allusers', {params: {token: token},withCredentials: true})
-      .then(response => {
-        setUserData(response.data);
-        console.log(response.data);
-        setLoading1(false);
-      })
-      .catch(error => {
-        console.error("Error fetching user data:", error);
-        
-      });
+    fetch(`/allusers?token=${token}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setUserData(data);
+      console.log(data);
+      setLoading1(false);
+    })
+    .catch(error => {
+      console.error("Error fetching user data:", error);
+    });
   }, []);
-
+  
   useEffect(() => {
-    axios.get('/mydata', { withCredentials: true })
-      .then(response => {
-        setMyData(response.data);
-        setFriendsList(response.data.friends);
-        setLoading2(false);
-      })
-      .catch(error => {
-        console.error("Error fetching my data:", error);
-      });
+    fetch('/mydata', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setMyData(data);
+      setFriendsList(data.friends);
+      setLoading2(false);
+    })
+    .catch(error => {
+      console.error("Error fetching my data:", error);
+    });
   }, []);
+  
   
   const sendFriendRequest = (email) => {
     let data = { to: email, from: myData.email };
