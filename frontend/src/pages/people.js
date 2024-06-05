@@ -17,7 +17,10 @@ function People() {
 
   useEffect(() => {
     axios.get('https://nitw-connect-backend.vercel.app/allusers', {params: {token: token},withCredentials: true})
-      .then(response => {setUserData(response.data);})
+      .then(response => {
+        setUserData(response.data);
+        setLoading1(false);
+      })
       .catch(error => {
         console.error("Error fetching user data:", error);});
   }, []);
