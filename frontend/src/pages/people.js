@@ -2,67 +2,72 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Sidebar from "./sidebar";
 import { Link, useNavigate } from "react-router-dom";
+
 function People() {
   const [userData, setUserData] = useState([]);
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [myData,setMyData] = useState(null);
-  const[friendsList,setFriendsList] = useState(null);
+  const [myData, setMyData] = useState(null);
+  const [friendsList, setFriendsList] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token')
-  if(!token) {
-    navigate('/login');
-  }
-
 
   useEffect(() => {
-    axios.get('https://nitw-connect-backend.vercel.app/allusers', {params: {token: token},withCredentials: true})
+    if (!token) {
+      navigate('/login');
+      return; // Stop execution if token is not present
+    }
+
+    axios.get('https://nitw-connect-backend.vercel.app/allusers', { params: { token }, withCredentials: true })
       .then(response => {
         setUserData(response.data);
-        setLoading1(false);
+        setLoading1(false); // Update loading state when data is received
       })
       .catch(error => {
-        console.error("Error fetching user data:", error);});
-  }, []);
+        console.error("Error fetching user data:", error);
+        setLoading1(false); // Update loading state in case of error
+      });
+  }, [token, navigate]); // Make sure to include dependencies in useEffect dependencies array
 
   useEffect(() => {
     axios.get('https://nitw-connect-backend.vercel.app/mydata', { withCredentials: true })
       .then(response => {
         setMyData(response.data);
         setFriendsList(response.data.friends);
-        setLoading2(false);
+        setLoading2(false); // Update loading state when data is received
       })
       .catch(error => {
         console.error("Error fetching my data:", error);
+        setLoading2(false); // Update loading state in case of error
       });
   }, []);
-  
+
+  // Function to handle sending friend request
   const sendFriendRequest = (email) => {
     let data = { to: email, from: myData.email };
     axios.post("https://nitw-connect-backend.vercel.app/addfriend", data)
-        .then(result => {
-            console.log(result.data.message);
-            if (result.status === 201) {
-                alert("Sent friend request successfully!");
-            }
-        })
-        .catch(error => {
-            if (error.response) {
-                console.error(error.response.data.message);
-                // Handle different error statuses
-                if (error.response.status === 409) {
-                    alert(error.response.data.message); // Display the specific error message from the server
-                } else if (error.response.status === 500) {
-                    alert("Internal server error");
-                }
-            } else {
-                console.error("Error", error.message);
-            }
-        });
-};
+      .then(result => {
+        console.log(result.data.message);
+        if (result.status === 201) {
+          alert("Sent friend request successfully!");
+        }
+      })
+      .catch(error => {
+        if (error.response) {
+          console.error(error.response.data.message);
+          // Handle different error statuses
+          if (error.response.status === 409) {
+            alert(error.response.data.message); // Display the specific error message from the server
+          } else if (error.response.status === 500) {
+            alert("Internal server error");
+          }
+        } else {
+          console.error("Error", error.message);
+        }
+      });
+  };
 
-
-
+  // If loading, display a loading message
   if (loading1 || loading2) {
     return <div>Loading...</div>;
   }
@@ -83,12 +88,11 @@ function People() {
               <p className="text-gray-700">CGPA: {user.cgpa}</p>
               {friendsList.includes(user.email) ? (
                 <Link to='/messages' className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"><p>Message</p></Link>
-                  ) : (
-                    <button onClick={() => sendFriendRequest(user.email)} className="mt-2 text-indigo-500 hover:underline focus:outline-none">
-                    Add Friend
-                  </button>
-      )       }
-              
+              ) : (
+                <button onClick={() => sendFriendRequest(user.email)} className="mt-2 text-indigo-500 hover:underline focus:outline-none">
+                  Add Friend
+                </button>
+              )}
             </div>
           ))}
         </div>
