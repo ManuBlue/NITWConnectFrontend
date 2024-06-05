@@ -6,23 +6,10 @@ function Home() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
-    // Retrieve the JWT token from local storage
-    const token = localStorage.getItem('token');
-
-    // If token is not found, redirect to login page
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
-    // Fetch user data from the server with token included in request headers
+    // Fetch user data from the server with cookie included in request headers
     fetch('https://nitwconnectbackend.onrender.com/mydata', {
-      credentials: 'include',
-      headers: {
-        'Authorization': `Bearer ${token}` // Include the JWT token in the Authorization header
-      }
+      credentials: 'include'
     })
       .then(response => response.json())
       .then(mydata => {
@@ -34,6 +21,7 @@ function Home() {
         setLoading(false);
       });
   }, [navigate]);
+
 
   return (
     <>

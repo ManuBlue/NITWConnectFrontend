@@ -14,15 +14,12 @@ function Login() {
       [name]: value
     });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('https://nitwconnectbackend.onrender.com/login', data, { withCredentials: true })
       .then(result => {
         console.log(result.data.message);
         if (result.status === 200) {
-          // Store the JWT token in local storage
-          localStorage.setItem('token', result.data.token);
           navigate('/homepage');
         }
       })
@@ -37,8 +34,8 @@ function Login() {
           console.error("Error", error.message);
         }
       });
-  };
-  
+};
+
 
   useEffect(() => {
     fetch('https://nitwconnectbackend.onrender.com/mydata', { credentials: 'include' })
