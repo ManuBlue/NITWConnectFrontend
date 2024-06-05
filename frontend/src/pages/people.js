@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
 import Sidebar from "./sidebar";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -19,9 +18,9 @@ function People() {
     }
 
     fetch(`https://nitw-connect-backend.vercel.app/allusers`)
-      .then(response => {
-        setUserData(response.data);
-        console.log(response.data);
+      .then(response => response.json()) // Parse response JSON
+      .then(data => {
+        setUserData(data);
         setLoading1(false); // Update loading state when data is received
       })
       .catch(error => {
@@ -32,39 +31,38 @@ function People() {
 
   useEffect(() => {
     fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
-      .then(response => {
-        setMyData(response.data);
-        setFriendsList(response.data.friends);
+      .then(response => response.json()) // Parse response JSON
+      .then(data => {
+        setMyData(data);
+        setFriendsList(data.friends);
         setLoading2(false); // Update loading state when data is received
       })
       .catch(error => {
         console.error("Error fetching my data:", error);
         setLoading2(false); // Update loading state in case of error
       });
-  }, []);
+  }, [token]);
 
   // Function to handle sending friend request
   const sendFriendRequest = (email) => {
     let data = { to: email, from: myData.email };
-    axios.post("https://nitw-connect-backend.vercel.app/addfriend", data)
+    fetch("https://nitw-connect-backend.vercel.app/addfriend", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
       .then(result => {
-        console.log(result.data.message);
+        console.log(result.message);
         if (result.status === 201) {
           alert("Sent friend request successfully!");
         }
       })
       .catch(error => {
-        if (error.response) {
-          console.error(error.response.data.message);
-          // Handle different error statuses
-          if (error.response.status === 409) {
-            alert(error.response.data.message); // Display the specific error message from the server
-          } else if (error.response.status === 500) {
-            alert("Internal server error");
-          }
-        } else {
-          console.error("Error", error.message);
-        }
+        console.error("Error sending friend request:", error);
+        alert("Error sending friend request");
       });
   };
 
