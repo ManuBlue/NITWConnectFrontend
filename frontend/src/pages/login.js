@@ -16,10 +16,11 @@ function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://nitwconnectbackend.onrender.com/login', data, { withCredentials: true })
+    axios.post('https://nitwconnectbackend.onrender.com/login', data)
       .then(result => {
         console.log(result.data.message);
         if (result.status === 200) {
+          localStorage.setItem('token', result.data.token);
           navigate('/homepage');
         }
       })
