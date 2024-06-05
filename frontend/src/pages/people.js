@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import Sidebar from "./sidebar";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 function People() {
   const [userData, setUserData] = useState([]);
   const [loading1, setLoading1] = useState(true);
@@ -14,51 +13,28 @@ function People() {
     navigate('/login');
   }
   useEffect(() => {
-    fetch(`/allusers?token=${token}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      setUserData(data);
-      console.log(data);
-      setLoading1(false);
-    })
-    .catch(error => {
-      console.error("Error fetching user data:", error);
-    });
+    axios.get('/allusers', {params: {token: token},withCredentials: true})
+      .then(response => {
+        setUserData(response.data);
+        console.log(response.data);
+        setLoading1(false);
+      })
+      .catch(error => {
+        console.error("Error fetching user data:", error);
+        
+      });
   }, []);
-  
+
   useEffect(() => {
-    fetch('/mydata', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      setMyData(data);
-      setFriendsList(data.friends);
-      setLoading2(false);
-    })
-    .catch(error => {
-      console.error("Error fetching my data:", error);
-    });
+    axios.get('/mydata', { withCredentials: true })
+      .then(response => {
+        setMyData(response.data);
+        setFriendsList(response.data.friends);
+        setLoading2(false);
+      })
+      .catch(error => {
+        console.error("Error fetching my data:", error);
+      });
   }, []);
   
   
