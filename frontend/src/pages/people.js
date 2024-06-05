@@ -71,32 +71,7 @@ function People() {
   }
 
   return (
-    <div className="min-h-screen flex antialiased bg-gray-50 text-gray-800">
-      <Sidebar />
-      <div className="flex-grow p-6">
-        <h1 className="text-3xl font-bold mb-4">People</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {userData.map((user, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex justify-center mb-4">
-                <img className="w-40 h-40 rounded-full object-cover" src={user.profilePicture} alt="Profile"/>
-              </div>
-              <h2 className="text-xl font-semibold">{user.username}</h2>
-              <p className="text-gray-700">Branch: {user.branch}</p>
-              <p className="text-gray-700">CGPA: {user.cgpa}</p>
-              {friendsList.includes(user.email) ? (
-                <Link to='/messages' className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"><p>Message</p></Link>
-                  ) : (
-                    <button onClick={() => sendFriendRequest(user.email)} className="mt-2 text-indigo-500 hover:underline focus:outline-none">
-                    Add Friend
-                  </button>
-      )       }
-              
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <h1>Testing</h1>
   );
 }
 
