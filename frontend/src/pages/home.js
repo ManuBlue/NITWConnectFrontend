@@ -8,7 +8,7 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://nitwconnectbackend.onrender.com/mydata')
+    fetch('https://nitw-connect-backend.vercel.app/mydata')
       .then(response => response.json())
       .then(mydata => {
         if (!mydata || !mydata.username) {
