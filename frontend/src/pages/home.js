@@ -17,7 +17,7 @@ function Home() {
     }
 
     // Fetch user data from the server with token included in query parameters
-    fetch(`https://nitwconnectbackend.onrender.com/mydata?token=${token}`)
+    fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
       .then(response => response.json())
       .then(mydata => {
         if (!mydata || !mydata.username) {
