@@ -17,7 +17,7 @@ function People() {
       return; // Stop execution if token is not present
     }
 
-    fetch(`https://nitw-connect-backend.vercel.app/allusers`)
+    fetch(`https://nitw-connect-backend.vercel.app/allusers?token=${token}`)
       .then(response => response.json()) // Parse response JSON
       .then(data => {
         setUserData(data);
@@ -77,7 +77,6 @@ function People() {
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-bold mb-4">People</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <h1>Hello {myData.username}</h1>
           {userData.map((user, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex justify-center mb-4">
