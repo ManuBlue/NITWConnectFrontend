@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Sidebar from "./sidebar";
-import {useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function People() {
   const [userData, setUserData] = useState([]);
   const [loading1, setLoading1] = useState(true);
@@ -85,7 +85,7 @@ function People() {
               <p className="text-gray-700">Branch: {user.branch}</p>
               <p className="text-gray-700">CGPA: {user.cgpa}</p>
               {friendsList.includes(user.email) ? (
-                <a to='/messages' className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"><p>Message</p></a>
+                <Link to='/messages' className="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"><p>Message</p></Link>
                   ) : (
                     <button onClick={() => sendFriendRequest(user.email)} className="mt-2 text-indigo-500 hover:underline focus:outline-none">
                     Add Friend
