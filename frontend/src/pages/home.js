@@ -16,12 +16,8 @@ function Home() {
       return;
     }
 
-    // Fetch user data from the server with token included in request headers
-    fetch('https://nitwconnectbackend.onrender.com/mydata', {
-      headers: {
-        'Authorization': `Bearer ${token}` // Include the JWT token in the Authorization header
-      }
-    })
+    // Fetch user data from the server with token included in query parameters
+    fetch(`https://nitwconnectbackend.onrender.com/mydata?token=${token}`)
       .then(response => response.json())
       .then(mydata => {
         if (!mydata || !mydata.username) {
@@ -32,6 +28,7 @@ function Home() {
         setLoading(false);
       });
   }, [navigate]);
+
 
 
   return (
