@@ -18,24 +18,27 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('https://nitwconnectbackend.onrender.com/login', data, { withCredentials: true })
-    .then(result => {
-      console.log(result.data.message);
-      if (result.status === 200) {
-        navigate('/homepage');
-      }
-    })
-    .catch(error => {
-      if (error.response) {
-        console.error(error.response.data.message);
-        // Handle different error statuses
-        if (error.response.status === 401) {
-          alert("Invalid email or password");
+      .then(result => {
+        console.log(result.data.message);
+        if (result.status === 200) {
+          // Store the JWT token in local storage
+          localStorage.setItem('token', result.data.token);
+          navigate('/homepage');
         }
-      } else {
-        console.error("Error", error.message);
-      }
-    });
+      })
+      .catch(error => {
+        if (error.response) {
+          console.error(error.response.data.message);
+          // Handle different error statuses
+          if (error.response.status === 401) {
+            alert("Invalid email or password");
+          }
+        } else {
+          console.error("Error", error.message);
+        }
+      });
   };
+  
 
   useEffect(() => {
     fetch('https://nitwconnectbackend.onrender.com/mydata', { credentials: 'include' })

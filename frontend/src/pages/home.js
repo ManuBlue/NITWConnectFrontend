@@ -8,7 +8,22 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://nitwconnectbackend.onrender.com/mydata', { credentials: 'include' })
+    // Retrieve the JWT token from local storage
+    const token = localStorage.getItem('token');
+
+    // If token is not found, redirect to login page
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    // Fetch user data from the server with token included in request headers
+    fetch('https://nitwconnectbackend.onrender.com/mydata', {
+      credentials: 'include',
+      headers: {
+        'Authorization': `Bearer ${token}` // Include the JWT token in the Authorization header
+      }
+    })
       .then(response => response.json())
       .then(mydata => {
         if (!mydata || !mydata.username) {
