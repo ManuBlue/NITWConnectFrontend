@@ -19,6 +19,7 @@ function People() {
     axios.get('/allusers', {params: {token: token},withCredentials: true})
       .then(response => {
         setUserData(response.data);
+        console.log(userData)
         setLoading1(false);
       })
       .catch(error => {
