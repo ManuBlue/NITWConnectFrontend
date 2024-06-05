@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import Hero from "./hero";
+
 function Login() {
   const [data, setData] = useState({ password: "", email: "" });
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ function Login() {
   };
 
   useEffect(() => {
-    fetch('/mydata', { credentials: 'include' })
+    fetch('https://nitwconnectbackend.onrender.com/mydata', { credentials: 'include' })
       .then(response => {
         if (response.status === 401) {
           return null;
@@ -53,7 +54,7 @@ function Login() {
 
   return (
     <>
-    <Hero/>
+      <Hero/>
       <div className="bg-white py-6 sm:py-8 lg:py-12">
         <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
           <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 lg:text-3xl">Login</h2>

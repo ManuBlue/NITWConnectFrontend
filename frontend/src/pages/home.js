@@ -8,14 +8,14 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://nitwconnectbackend.onrender.com/mydata')
+    fetch('https://nitwconnectbackend.onrender.com/mydata', { credentials: 'include' })
       .then(response => response.json())
       .then(mydata => {
         if (!mydata || !mydata.username) {
-            navigate('/login');
-          } else {
-            setData(mydata);
-          }
+          navigate('/login');
+        } else {
+          setData(mydata);
+        }
         setLoading(false);
       });
   }, [navigate]);
@@ -25,7 +25,7 @@ function Home() {
       <div className="min-h-screen flex flex-row antialiased bg-gray-50 text-gray-800 bg-pattern">
         <Sidebar />
         {loading ? (
-          <div className="flex-grow flex items-center justify-center ">
+          <div className="flex-grow flex items-center justify-center">
             <h1 className="text-2xl">Loading...</h1>
           </div>
         ) : (
