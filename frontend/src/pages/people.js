@@ -18,9 +18,10 @@ function People() {
       return; // Stop execution if token is not present
     }
 
-    axios.get('https://nitw-connect-backend.vercel.app/allusers', { params: { token }, withCredentials: true })
+    fetch(`https://nitw-connect-backend.vercel.app/allusers`)
       .then(response => {
         setUserData(response.data);
+        console.log(response.data);
         setLoading1(false); // Update loading state when data is received
       })
       .catch(error => {
@@ -30,7 +31,7 @@ function People() {
   }, [token, navigate]); // Make sure to include dependencies in useEffect dependencies array
 
   useEffect(() => {
-    axios.get('https://nitw-connect-backend.vercel.app/mydata', { withCredentials: true })
+    fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
       .then(response => {
         setMyData(response.data);
         setFriendsList(response.data.friends);
@@ -78,6 +79,7 @@ function People() {
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-bold mb-4">People</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <h1>Hello {myData.username}</h1>
           {userData.map((user, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex justify-center mb-4">
