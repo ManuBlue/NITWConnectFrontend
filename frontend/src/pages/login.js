@@ -16,7 +16,7 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://nitw-connect-backend.vercel.app/login', data, { withCredentials: true })
+    axios.post('https://nitwconnectbackend.onrender.com/login', data, { withCredentials: true })
     .then(result => {
       console.log(result.data.message);
       if (result.status === 200) {
