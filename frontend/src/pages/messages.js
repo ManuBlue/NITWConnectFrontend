@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "./sidebar";
-
+import { useNavigate } from "react-router-dom";
 function Messages() {
     const [friends, setFriends] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -11,6 +11,7 @@ function Messages() {
     const [userData, setUserData] = useState(null);
     const [newMessage, setNewMessage] = useState("");
     const token = localStorage.getItem('token')
+    const navigate = useNavigate();
     //Get uhhh user data and friends data
     useEffect(() => {
         fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
