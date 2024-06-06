@@ -1,20 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Sidebar from "./sidebar";
-import { Link } from "react-router-dom";
+import {useNavigate, Link } from "react-router-dom";
 
 function Profile() {
   const [userData, setUserData] = useState(null);
-
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  if (!token) {
+    navigate('/login');
+    return;
+  }
   useEffect(() => {
-    axios.get('/mydata', { withCredentials: true })
-      .then(response => {
-        setUserData(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching user data:", error);
+    
+    fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
+      .then(response => response.json())
+      .then(mydata => {
+        if (!mydata || !mydata.username) {
+          navigate('/login');
+        } else {
+          setData(mydata);
+        }
       });
-  }, []);
+  }, [navigate]);
 
   if (!userData) {
     return <div>Loading...</div>;
