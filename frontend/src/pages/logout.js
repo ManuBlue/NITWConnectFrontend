@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 function Logout() {
   const navigate = useNavigate();
-  // const [message, setMessage] = useState("Failed to logout : c");
+  const [message, setMessage] = useState("Failed to logout : c");
   // const navigate = useNavigate();
 
   // useEffect(() => {
