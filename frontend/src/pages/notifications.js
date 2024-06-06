@@ -13,7 +13,7 @@ function Notifications() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('/mydata')
+        fetch('https://nitw-connect-backend.vercel.app/mydata?token=${token}')
             .then(response => response.json())
             .then(mydata => {
                 if (!mydata || !mydata.username) {
