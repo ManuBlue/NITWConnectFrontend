@@ -44,7 +44,7 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/signup", data)
+    axios.post("https://nitw-connect-backend.vercel.app/signup", data)
     .then(result => {
       console.log(result.data.message);
       if (result.status === 201) {
