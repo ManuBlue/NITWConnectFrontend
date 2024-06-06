@@ -6,7 +6,7 @@ import {useNavigate, Link } from "react-router-dom";
 function Profile() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     // Retrieve the JWT token from local storage
     const token = localStorage.getItem('token');
@@ -24,12 +24,12 @@ function Profile() {
         if (!mydata || !mydata.username) {
           navigate('/login');
         } else {
-          setData(mydata);
+          setUserData(mydata);
         }
         setLoading(false);
       });
   }, [navigate]);
-  if (!userData) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
