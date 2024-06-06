@@ -7,12 +7,17 @@ function Profile() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  if (!token) {
-    navigate('/login');
-    return;
-  }
   useEffect(() => {
-    
+    // Retrieve the JWT token from local storage
+    const token = localStorage.getItem('token');
+
+    // If token is not found, redirect to login page
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    // Fetch user data from the server with token included in query parameters
     fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
       .then(response => response.json())
       .then(mydata => {
@@ -21,9 +26,9 @@ function Profile() {
         } else {
           setData(mydata);
         }
+        setLoading(false);
       });
   }, [navigate]);
-
   if (!userData) {
     return <div>Loading...</div>;
   }
