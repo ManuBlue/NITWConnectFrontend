@@ -27,7 +27,7 @@ function Notifications() {
 
     const retrieveUserData = async (email) => {
         try {
-            const response = await axios.get(`/retrievedata?email=${email}`);
+            const response = await axios.get(`https://nitw-connect-backend.vercel.app/retrievedata?email=${email}`);
             return response.data;
         } catch (error) {
             console.error("Error retrieving user data:", error);
@@ -37,7 +37,7 @@ function Notifications() {
 
     useEffect(() => {
         if (loading1) {
-            axios.get('/incomingfriendrequests', { withCredentials: true })
+            axios.get('https://nitw-connect-backend.vercel.app/incomingfriendrequests?token=${token}', { withCredentials: true })
                 .then(async (response) => {
                     const requests = response.data;
                     const incomingDataPromises = requests.map(async (request) => {
