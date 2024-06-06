@@ -10,18 +10,22 @@ function Messages() {
     const [loadingMessages, setLoadingMessages] = useState(false);
     const [userData, setUserData] = useState(null);
     const [newMessage, setNewMessage] = useState("");
+    const token = localStorage.getItem('token')
     //Get uhhh user data and friends data
     useEffect(() => {
-        axios.get('/mydata', { withCredentials: true })
-            .then(response => {
-                setUserData(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching user data:", error);
-            });
+        fetch(`https://nitw-connect-backend.vercel.app/mydata?token=${token}`)
+      .then(response => response.json())
+      .then(mydata => {
+        if (!mydata || !mydata.username) {
+          navigate('/login');
+        } else {
+          setUserData(mydata);
+        }
+      });
 
-        axios.get('/myfriends', { withCredentials: true })
-            .then(response => {
+        fetch('https://nitw-connect-backend.vercel.app/myfriends?token=${token}', { withCredentials: true })
+            .then(res =>  res.json())
+            .then()(response => {
                 setFriends(response.data);
                 setLoading(false);
             })
@@ -36,7 +40,7 @@ function Messages() {
         let interval;
         if (selectedFriend) {
             interval = setInterval(() => {
-                axios.get(`/messages?user1=${userData.email}&user2=${selectedFriend.email}`, { withCredentials: true })
+                axios.get(`https://nitw-connect-backend.vercel.app/messages?user1=${userData.email}&user2=${selectedFriend.email}`, { withCredentials: true })
                     .then(response => {
                         setMessages(response.data);
                     })
@@ -54,7 +58,7 @@ function Messages() {
 
         setSelectedFriend(friend);
         setLoadingMessages(true);
-        axios.get(`/messages?user1=${userData.email}&user2=${friend.email}`, { withCredentials: true })
+        axios.get(`https://nitw-connect-backend.vercel.app/messages?user1=${userData.email}&user2=${friend.email}`, { withCredentials: true })
             .then(response => {
                 setMessages(response.data);
                 setLoadingMessages(false);
@@ -77,7 +81,7 @@ function Messages() {
             timestamp: new Date()
         };
 
-        axios.post('/sendmessage', messageData, { withCredentials: true })
+        axios.post('https://nitw-connect-backend.vercel.app/sendmessage?token=${token}', messageData, { withCredentials: true })
             .then(response => {
                 setNewMessage("");
             })
